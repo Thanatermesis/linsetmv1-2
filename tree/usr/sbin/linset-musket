@@ -48,7 +48,7 @@
 ##  is a project for a latter time.
 ##    This program writes most of its data to a /tmp/TMPlinset/ folder. This folder is cleared
 ##  by linset at shutdown and the /tmp/ folder is cleared by kali when the computer is shut ##  down. Any WPA key phished is loaded into the /tmp/TMPlinset/data.txt files. This file is
-##  erased when the /tmp/ folder is cleared. To avoid loosing data, the program now loads any ##  keys into the /root/linset/allkeys.txt at shutdown. If no keys found scroll to the bottom ##  of the text file.
+##  erased when the /tmp/ folder is cleared. To avoid loosing data, the program now loads any ##  keys into the /tmp/linset-musket-$USER/allkeys.txt at shutdown. If no keys found scroll to the bottom ##  of the text file.
 ##
 ##      Airbase-ng will now accept spaces in ESSID names.
 ##
@@ -67,9 +67,9 @@ clear
 ##################################### < SCRIPT CONFIGURATION > #####################################
 
 # Route data storage
-DUMP_PATH="/tmp/TMPlinset"
+DUMP_PATH="/tmp/TMPlinset-$USER"
 sleep 2
-cat $DUMP_PATH/data.txt >> /root/linset/alldata.txt
+cat $DUMP_PATH/data.txt >> /tmp/linset-musket-$USER/alldata.txt
 sleep 1
 rm -R $DUMP_PATH/* &> /dev/null
 # Number of deauths
@@ -156,10 +156,10 @@ trap exitmode SIGINT
 
 # Function that cleans and leaves interfaces
 function exitmode {
-        echo "  Copying data in $DUMP_PATH/data.txt file into /root/linset/alldata.txt."
+        echo "  Copying data in $DUMP_PATH/data.txt file into /tmp/linset-musket-$USER/alldata.txt."
         chmod 777 $DUMP_PATH/data.txt
-	chmod 777 /root/linset/alldata.txt
- 	cat $DUMP_PATH/data.txt >> /root/linset/alldata.txt
+	chmod 777 /tmp/linset-musket-$USER/alldata.txt
+ 	cat $DUMP_PATH/data.txt >> /tmp/linset-musket-$USER/alldata.txt
 	echo -e "\n\n"$blanco"["$rojo" "$blanco"] "$rojo"Running cleaning and closing."$rescolor""
 
 	if ps -A | grep -q aireplay-ng; then
@@ -199,12 +199,12 @@ function exitmode {
 
 	if [ "$WIFI_MONITOR" != "" ]; then
 		echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"stopping interface "$verde"$WIFI_MONITOR"$rescolor""
-		./airmon stop $WIFI_MONITOR &> $linset_output_device
+		/usr/lib/linset-musket/airmon-musket stop $WIFI_MONITOR &> $linset_output_device
 	fi
 
 	if [ "$WIFI" != "" ]; then
 		echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"stopping interface "$verde"$WIFI"$rescolor""
-		./airmon stop $WIFI &> $linset_output_device
+		/usr/lib/linset-musket/airmon-musket stop $WIFI &> $linset_output_device
 	fi
 
 	if [ "$(cat /proc/sys/net/ipv4/ip_forward)" != "0" ]; then
@@ -366,7 +366,7 @@ function checkdependences {
 	sleep 0.025
 
 	echo -ne "./airmon......."
-	if ! hash ./airmon 2>/dev/null; then
+	if ! hash /usr/lib/linset-musket/airmon-musket 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
 		salir=1
 	else
@@ -695,13 +695,13 @@ function setinterface {
 	KILLMONITOR=`iwconfig 2>&1 | grep Monitor | awk '{print $1}'`
 
 	for monkill in ${KILLMONITOR[@]}; do
-		./airmon stop $monkill >$linset_output_device
+		/usr/lib/linset-musket/airmon-musket stop $monkill >$linset_output_device
 		echo -n "$monkill, "
 	done
 
 	# Create a variable with the list of physical network interfaces
-	readarray -t wirelessifaces < <(./airmon |grep "-" | awk '{print $1}')
-	INTERFACESNUMBER=`./airmon| grep -c "-"`
+	readarray -t wirelessifaces < <(/usr/lib/linset-musket/airmon-musket |grep "-" | awk '{print $1}')
+	INTERFACESNUMBER=`/usr/lib/linset-musket/airmon-musket | grep -c "-"`
 
 	echo "Musket Version linset-mv1.1 for WPA Phishing"
 	echo
@@ -735,8 +735,8 @@ function setinterface {
 			setinterface
 		fi
 
-		readarray -t softwaremolesto < <(./airmon check $PREWIFI | tail -n +8 | grep -v "on interface" | awk '{ print $2 }')
-		WIFIDRIVER=$(./airmon | grep "$PREWIFI" | awk '{print($(NF-2))}')
+		readarray -t softwaremolesto < <(/usr/lib/linset-musket/airmon-musket check $PREWIFI | tail -n +8 | grep -v "on interface" | awk '{ print $2 }')
+		WIFIDRIVER=$(/usr/lib/linset-musket/airmon-musket | grep "$PREWIFI" | awk '{print($(NF-2))}')
 		rmmod -f "$WIFIDRIVER" &>$linset_output_device 2>&1
 
 		for molesto in "${softwaremolesto[@]}"; do
@@ -751,7 +751,7 @@ function setinterface {
 			break;
 		done
 
-		WIFIMONITOR=$(./airmon start $PREWIFI | grep "enabled on" | cut -d " " -f 5 | cut -d ")" -f 1)
+		WIFIMONITOR=$(/usr/lib/linset-musket/airmon-musket start $PREWIFI | grep "enabled on" | cut -d " " -f 5 | cut -d ")" -f 1)
 		WIFI_MONITOR=$WIFIMONITOR
 		# Sets a variable to the physical interface
 		  WIFI=$PREWIFI
@@ -1268,7 +1268,7 @@ function preattack {
 #######
 ##  Musket Notes - it was found that embedding php coding into bash and printing out with
 ## echo > corrupted the code. The savekey.php had to be loaded with cp from a existing
-## file into the /tmp/linset/data folder to function. Thus a /root/linset/ folder was
+## file into the /tmp/linset/data folder to function. Thus a /tmp/linset-musket-$USER/ folder was
 ## established. The php file also had to be rewitten to work in phishing along with the html ## pages which also failed in various ways. Thus the holdphp fuction below is not used as it
 ## didnot work. MTeams loaded the unused code into a function and did not use, to save having
 ## to either erase it or REM/COMMENT out.
@@ -1339,7 +1339,7 @@ sleep 1
 
 }
 
-cp linset/savekey.php  $DUMP_PATH/data/savekey.php
+cp /usr/share/linset-musket/savekey.php  $DUMP_PATH/data/savekey.php
 
 
 
